@@ -18,156 +18,84 @@ public class Table extends JPanel implements ActionListener {
     private ArrayList<Card> playerCards;
     private ArrayList<Card> dealerCards;
     
-	private JButton hitButton;
 	private JButton newGameButton;
-	private JButton standButton;
-	private JLabel pointTable;
-	private JLabel pointTable6;
-	private JLabel pointTable5;
-	private JLabel pointTable4;
-	private JLabel pointTable2;
-	private JLabel pointTable3;
-	private JLabel pointTable1;
-	private JLabel scoreLabel;
-	private JLabel currentValueLabel;
+    private JButton standButton;
+    private JButton hitButton;
 
-	private JLabel lostLabel;
-	private JLabel wonLabel;
-	private JLabel blackJackLabel;
+    private JLabel playerScoreLabel;
+    private JLabel playerWinCounterLabel;
+    private JLabel dealerScoreLabel;
+    private JLabel dealerWinCounterLabel;
 
 	AudioPlayer audioPlayer;
 
-	private int score;
-	private int previousPointsWon;
+	private int playerWins;
+    private int dealerWins;
 	private boolean first;
 
 	public Table(){
 		setLayout(null);
 
-        hitButton = new JButton();
-        hitButton.setFont(new Font("Arial", Font.BOLD, 20));
-        hitButton.setHorizontalAlignment(SwingConstants.CENTER);
-        hitButton.setBounds(35, 25, 200, 30);
-        hitButton.setText("Hit");
-        this.add(hitButton);
-        hitButton.addActionListener(this);
-		hitButton.setVisible(false);
+        newGameButton = new JButton();
+        newGameButton.setFont(new Font("Arial", Font.BOLD, 20));
+        newGameButton.setHorizontalAlignment(SwingConstants.CENTER);
+        newGameButton.setBounds(560, 365, 200, 30);
+        newGameButton.setText("New Game");
+        this.add(newGameButton);
+        newGameButton.addActionListener(this);
 
         standButton = new JButton();
         standButton.setFont(new Font("Arial", Font.BOLD, 20));
         standButton.setHorizontalAlignment(SwingConstants.CENTER);
-        standButton.setBounds(35, 95, 200, 30);
+        standButton.setBounds(560, 305, 200, 30);
         standButton.setText("Stand");
         this.add(standButton);
         standButton.addActionListener(this);
-		standButton.setVisible(false);
 
-        newGameButton = new JButton();
-        newGameButton.setFont(new Font("Arial", Font.BOLD, 20));
-        newGameButton.setHorizontalAlignment(SwingConstants.CENTER);
-        newGameButton.setBounds(35, 525, 200, 30);
-        newGameButton.setText("New Game");
-        this.add(newGameButton);
-        newGameButton.addActionListener(this);
-		
-        pointTable = new JLabel();
-        pointTable.setFont(new Font("Arial", Font.BOLD, 20));
-        pointTable.setHorizontalAlignment(SwingConstants.RIGHT);
-        pointTable.setBounds(520, 25, 250, 30);
-        pointTable.setText("Winning Points Table:");
-        this.add(pointTable);
-		pointTable.setVisible(false);
+        hitButton = new JButton();
+        hitButton.setFont(new Font("Arial", Font.BOLD, 20));
+        hitButton.setHorizontalAlignment(SwingConstants.CENTER);
+        hitButton.setBounds(560, 245, 200, 30);
+        hitButton.setText("Hit");
+        this.add(hitButton);
+        hitButton.addActionListener(this);
 
-		pointTable6 = new JLabel();
-		pointTable6.setFont(new Font("Arial", Font.BOLD, 20));
-		pointTable6.setHorizontalAlignment(SwingConstants.RIGHT);
-		pointTable6.setBounds(620, 270, 150, 30);
-		pointTable6.setText("16 - 1 point");
-		this.add(pointTable6);
-		pointTable6.setVisible(false);
+        playerScoreLabel = new JLabel();
+        playerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        playerScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        playerScoreLabel.setBounds(510, 415, 250, 30);
+        playerScoreLabel.setText("Current Player Score:");
+        playerScoreLabel.setForeground(Color.WHITE);
+        this.add(playerScoreLabel);
 
-		pointTable5 = new JLabel();
-		pointTable5.setFont(new Font("Arial", Font.BOLD, 20));
-		pointTable5.setHorizontalAlignment(SwingConstants.RIGHT);
-		pointTable5.setBounds(620, 230, 150, 30);
-		pointTable5.setText("17 - 1 point");
-		this.add(pointTable5);
-		pointTable5.setVisible(false);
+        dealerScoreLabel = new JLabel();
+        dealerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        dealerScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        dealerScoreLabel.setBounds(510, 465, 250, 30);
+        dealerScoreLabel.setText("Current Dealer Score:");
+        dealerScoreLabel.setForeground(Color.WHITE);
+        this.add(dealerScoreLabel);
 
-		pointTable4 = new JLabel();
-		pointTable4.setFont(new Font("Arial", Font.BOLD, 20));
-		pointTable4.setHorizontalAlignment(SwingConstants.RIGHT);
-		pointTable4.setBounds(620, 190, 150, 30);
-		pointTable4.setText("18 - 2 points");
-		this.add(pointTable4);
-		pointTable4.setVisible(false);
+        playerWinCounterLabel = new JLabel();
+        playerWinCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        playerWinCounterLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        playerWinCounterLabel.setBounds(510, 515, 250, 30);
+        playerWinCounterLabel.setText("Player Win Counter:");
+        playerWinCounterLabel.setForeground(Color.WHITE);
+        this.add(playerWinCounterLabel);
 
-		pointTable3 = new JLabel();
-		pointTable3.setFont(new Font("Arial", Font.BOLD, 20));
-		pointTable3.setHorizontalAlignment(SwingConstants.RIGHT);
-		pointTable3.setBounds(620, 150, 150, 30);
-		pointTable3.setText("19 - 2 points");
-		this.add(pointTable3);
-		pointTable3.setVisible(false);
-
-		pointTable2 = new JLabel();
-		pointTable2.setFont(new Font("Arial", Font.BOLD, 20));
-		pointTable2.setHorizontalAlignment(SwingConstants.RIGHT);
-		pointTable2.setBounds(620, 110, 150, 30);
-		pointTable2.setText("20 - 3 points");
-		this.add(pointTable2);
-		pointTable2.setVisible(false);
-
-		pointTable1 = new JLabel();
-		pointTable1.setFont(new Font("Arial", Font.BOLD, 20));
-		pointTable1.setHorizontalAlignment(SwingConstants.RIGHT);
-		pointTable1.setBounds(620, 70, 150, 30);
-		pointTable1.setText("21 - 5 points");
-		this.add(pointTable1);
-		pointTable1.setVisible(false);
-
-		scoreLabel = new JLabel();
-		scoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		scoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		scoreLabel.setBounds(560, 530, 230, 30);
-		scoreLabel.setText("Score: 20");
-		this.add(scoreLabel);
-
-		currentValueLabel = new JLabel();
-		currentValueLabel.setFont(new Font("Arial", Font.BOLD, 20));
-		currentValueLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-		currentValueLabel.setBounds(525, 480, 265, 30);
-		currentValueLabel.setText("Current Card Value: 0");
-		this.add(currentValueLabel);
-
-		lostLabel = new JLabel();
-		lostLabel.setFont(new Font("Arial", Font.BOLD, 31));
-		lostLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		lostLabel.setBounds(40, 65, 200, 30);
-		lostLabel.setText("You Lost!");
-		lostLabel.setForeground(Color.RED);
-		this.add(lostLabel);
-		lostLabel.setVisible(false);
-
-		wonLabel = new JLabel();
-		wonLabel.setFont(new Font("Arial", Font.BOLD, 30));
-		wonLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		wonLabel.setBounds(40, 65, 400, 30);
-		wonLabel.setText("You Just Won Points!");
-		wonLabel.setForeground(Color.GREEN);
-		this.add(wonLabel);
-		wonLabel.setVisible(false);
-
-		blackJackLabel = new JLabel();
-		blackJackLabel.setFont(new Font("Arial", Font.BOLD, 30));
-		blackJackLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		blackJackLabel.setBounds(40, 65, 200, 30);
-		blackJackLabel.setText("Black Jack!");
-		blackJackLabel.setForeground(new Color(164, 157, 19));
-		this.add(blackJackLabel);
-		blackJackLabel.setVisible(false);
+        dealerWinCounterLabel = new JLabel();
+        dealerWinCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        dealerWinCounterLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        dealerWinCounterLabel.setBounds(510, 565, 250, 30);
+        dealerWinCounterLabel.setText("Dealer Win Counter:");
+        dealerWinCounterLabel.setForeground(Color.WHITE);
+        this.add(dealerWinCounterLabel);
 
 		setFocusable(true);
+
+        hitButton.setVisible(false);
+		standButton.setVisible(false);
 
 		deck = new ArrayList<Card>();
         playerCards = new ArrayList<Card>();
@@ -177,10 +105,22 @@ public class Table extends JPanel implements ActionListener {
 
 		audioPlayer = new AudioPlayer();
 		
-		previousPointsWon = 0;
-		score = 20;
+		playerWins = 0;
+        dealerWins = 0;
 		first = true;
 	}
+
+    private void moveCardDecktoPlayer() {
+        playerCards.add(deck.get(0));
+        playerCards.get(playerCards.size() - 1).show();
+        deck.remove(0);
+    }
+
+    private void moveCardDecktoDealer() {
+        dealerCards.add(deck.get(0));
+        dealerCards.get(dealerCards.size() - 1).show();
+        deck.remove(0);
+    }
 
 	private void resetDecks() {
         playerCards.clear();
@@ -189,7 +129,7 @@ public class Table extends JPanel implements ActionListener {
 
         for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 13; j++) {
-				deck.add(new Card(j + 1, i, false));
+				deck.add(new Card(j + 1, i, true));
 			}
 		}
 
@@ -205,8 +145,8 @@ public class Table extends JPanel implements ActionListener {
 		int total = 0;
 		boolean hasAce = false;
 		for (int i = 0; i < playerCards.size(); i++) {
-            total += playerCards.get(i).getValue();
-			if (playerCards.get(i).isAce()) hasAce = true;
+            total += playerCards.get(i).isHidden() ? 0 : playerCards.get(i).getValue();
+			if (playerCards.get(i).isAce() && !(playerCards.get(i).isHidden())) hasAce = true;
         }
 		if (total + 10 <= 21 && hasAce) {
 			total += 10;
@@ -214,15 +154,24 @@ public class Table extends JPanel implements ActionListener {
 		return total;
 	}
 
-    private void moveCardDecktoPlayer() {
-        playerCards.add(deck.get(0));
-        deck.remove(0);
-    }
+    private int getDealerCardValue() {
+		int total = 0;
+		boolean hasAce = false;
+		for (int i = 0; i < dealerCards.size(); i++) {
+            total += dealerCards.get(i).isHidden() ? 0 : dealerCards.get(i).getValue();
+			if (dealerCards.get(i).isAce() && !(dealerCards.get(i).isHidden())) hasAce = true;
+        }
+		if (total + 10 <= 21 && hasAce) {
+			total += 10;
+		}
+		return total;
+	}
 
 	private void updateTexts() {
-		currentValueLabel.setText("Current Card Value: " + this.getPlayerCardValue());
-		scoreLabel.setText("Score: " + score);
-		wonLabel.setText("You Just Won " + previousPointsWon + " Point" + ((previousPointsWon > 1) ? "s!" : "!"));
+		playerScoreLabel.setText("Current Player Score: " + this.getPlayerCardValue());
+        dealerScoreLabel.setText("Current Dealer Score: " + this.getDealerCardValue());
+		playerWinCounterLabel.setText("Player Win Counter: " + playerWins);
+        dealerWinCounterLabel.setText("Dealer Win Counter: " + dealerWins);
 	}
 	
 	@Override
@@ -233,97 +182,88 @@ public class Table extends JPanel implements ActionListener {
 	@Override
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		for (int i = 0; i < playerCards.size(); i++) {
-            playerCards.get(i).draw(35 + i * 50, 200, g);
+        g.setColor(new Color(48, 95, 40)); // 47, 90, 40
+        g.fillRect(0, 0, 800, 600);
+
+        g.setColor(new Color(22, 43, 18));
+        int deckX = ((int) (40 - (deck.size() * 0.5)));
+        int deckY = ((int) (20 - ((deck.size() * 0.1)))) ;
+        int deckW = 138 + ((int) (deck.size() * 0.5));
+        int deckH = ((int) (205 - (deck.size() * 0.1)));
+
+        int[] shadowX = {deckX, (int) (deckX - deckW * 0.3), deckX + deckW};
+        int[] shadowY = {deckY + deckH, deckY - (int) (deckH * 0.1), 20};
+
+        g.fillPolygon(shadowX, shadowY, 3);
+
+        for (int i = 0; i < playerCards.size(); i++) {
+            playerCards.get(i).draw(20 + i * 70, 325, g);
         }
-	}
+
+        for (int i = 0; i < dealerCards.size(); i++) {
+            dealerCards.get(i).draw(215 + i * 70, 20, g);
+        }
+
+        for (int i = 0; i < deck.size(); i++) {
+            deck.get(i).draw((int) (40 - (i * 0.5)), (int) (20 - (i * 0.1)), g);
+        }
+
+        }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if  (e.getSource() == newGameButton) {
-			audioPlayer.playShuffleAudio();
-			if (first) {
-				newGameButton.setText("Play Again");
-				pointTable.setVisible(true);
-				pointTable1.setVisible(true);
-				pointTable2.setVisible(true);
-				pointTable3.setVisible(true);
-				pointTable4.setVisible(true);
-				pointTable5.setVisible(true);
-				pointTable6.setVisible(true);
-                first = false;
-			} else {
-                this.resetDecks();
-            }
-
-			hitButton.setVisible(true);
+            audioPlayer.playShuffleAudio();
+            hitButton.setVisible(true);
 			standButton.setVisible(true);
-			lostLabel.setVisible(false);
-			wonLabel.setVisible(false);
-			blackJackLabel.setVisible(false);			
+            this.resetDecks();
 
-			score--;
-			this.moveCardDecktoPlayer();
+            this.moveCardDecktoPlayer();
             this.moveCardDecktoPlayer();
 
-			if  (this.getPlayerCardValue() == 21) {
-				hitButton.setVisible(false);
-				standButton.setVisible(false);
-				blackJackLabel.setVisible(true);
-				score += 5;
-				audioPlayer.playWinAudio();
-			}
-		} else if (e.getSource() == hitButton) {
-			audioPlayer.playHitAudio();
+            this.moveCardDecktoDealer();
+            this.moveCardDecktoDealer();
+
+            dealerCards.get(1).hide();
+		}
+
+        if (e.getSource() == hitButton) {
+            audioPlayer.playHitAudio();
             this.moveCardDecktoPlayer();
 
 			if (this.getPlayerCardValue() > 21) {
+                audioPlayer.playLoseAudio();
 				hitButton.setVisible(false);
 				standButton.setVisible(false);
-				lostLabel.setVisible(true);
-				audioPlayer.playLoseAudio();
-			} else if  (this.getPlayerCardValue() == 21) {
-				hitButton.setVisible(false);
-				standButton.setVisible(false);
-				blackJackLabel.setVisible(true);
-				score += 5;
-				audioPlayer.playWinAudio();
+				dealerWins++;
 			}
-        } else if (e.getSource() == standButton) {
-			audioPlayer.playStandAudio();
-			hitButton.setVisible(false);
+        }
+
+        if (e.getSource() == standButton || this.getPlayerCardValue() == 21) {
+            audioPlayer.playStandAudio();
+            hitButton.setVisible(false);
 			standButton.setVisible(false);
+
+            dealerCards.get(1).show();
+	
+            while (this.getDealerCardValue() < 17 ) {
+                this.moveCardDecktoDealer();
+            }
+
+            if (this.getDealerCardValue() > 21) {
+                audioPlayer.playWinAudio();
+                playerWins++;
+            } else {
+                if (this.getPlayerCardValue() > this.getDealerCardValue()) {
+                    audioPlayer.playWinAudio();
+                    playerWins++;
+                } else if (this.getDealerCardValue() > this.getPlayerCardValue()) {
+                    audioPlayer.playLoseAudio();
+                    dealerWins++;
+                }
+            }
             
-			if (this.getPlayerCardValue() > 15 && this.getPlayerCardValue() < 21) {
-				wonLabel.setVisible(true);
-				switch (this.getPlayerCardValue()) {
-					case 16:
-						previousPointsWon = 1;
-						score += 1;
-						break;
-					case 17:
-						previousPointsWon = 1;
-						score += 1;
-						break;
-					case 18:
-						previousPointsWon = 2;
-						score += 2;
-						break;
-					case 19:
-						previousPointsWon = 2;
-						score += 2;
-						break;
-					case 20:
-						previousPointsWon = 3;
-						score += 3;
-						break;
-				}
-				audioPlayer.playWinAudio();
-			} else {
-				lostLabel.setVisible(true);
-				audioPlayer.playLoseAudio();
-			}
-		}
+        }
 
 		this.updateTexts();
         repaint();

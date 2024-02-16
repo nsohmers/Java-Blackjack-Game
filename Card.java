@@ -68,6 +68,10 @@ public class Card {
         return (this.type == 1) ? true : false;
     }
 
+    public boolean isHidden() {
+        return hidden;
+    }
+
     public void show() {
         hidden = false;
     }
