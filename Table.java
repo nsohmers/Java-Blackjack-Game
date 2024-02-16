@@ -31,7 +31,6 @@ public class Table extends JPanel implements ActionListener {
 
 	private int playerWins;
     private int dealerWins;
-	private boolean first;
 
 	public Table(){
 		setLayout(null);
@@ -107,7 +106,6 @@ public class Table extends JPanel implements ActionListener {
 		
 		playerWins = 0;
         dealerWins = 0;
-		first = true;
 	}
 
     private void moveCardDecktoPlayer() {
