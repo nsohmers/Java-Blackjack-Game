@@ -62,7 +62,7 @@ public class Table extends JPanel implements ActionListener {
         playerScoreLabel = new JLabel();
         playerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         playerScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        playerScoreLabel.setBounds(510, 415, 250, 30);
+        playerScoreLabel.setBounds(460, 415, 300, 30);
         playerScoreLabel.setText("Current Player Score:");
         playerScoreLabel.setForeground(Color.WHITE);
         this.add(playerScoreLabel);
@@ -70,7 +70,7 @@ public class Table extends JPanel implements ActionListener {
         dealerScoreLabel = new JLabel();
         dealerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         dealerScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        dealerScoreLabel.setBounds(510, 465, 250, 30);
+        dealerScoreLabel.setBounds(460, 465, 300, 30);
         dealerScoreLabel.setText("Current Dealer Score:");
         dealerScoreLabel.setForeground(Color.WHITE);
         this.add(dealerScoreLabel);
@@ -78,7 +78,7 @@ public class Table extends JPanel implements ActionListener {
         playerWinCounterLabel = new JLabel();
         playerWinCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
         playerWinCounterLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        playerWinCounterLabel.setBounds(510, 515, 250, 30);
+        playerWinCounterLabel.setBounds(460, 515, 300, 30);
         playerWinCounterLabel.setText("Player Win Counter:");
         playerWinCounterLabel.setForeground(Color.WHITE);
         this.add(playerWinCounterLabel);
@@ -86,7 +86,7 @@ public class Table extends JPanel implements ActionListener {
         dealerWinCounterLabel = new JLabel();
         dealerWinCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
         dealerWinCounterLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        dealerWinCounterLabel.setBounds(510, 565, 250, 30);
+        dealerWinCounterLabel.setBounds(460, 565, 300, 30);
         dealerWinCounterLabel.setText("Dealer Win Counter:");
         dealerWinCounterLabel.setForeground(Color.WHITE);
         this.add(dealerWinCounterLabel);
