@@ -26,7 +26,7 @@ public class AnimatedText {
                     for (int i = 0; i < text.length(); i++) {
                         String currentChar = Character.toString(text.charAt(i));
 
-                        int y = (time * 2 - (i * 20)) - 50;
+                        int y = (time * 5 - (i * 20)) - 50;
                         g.drawString(currentChar, x, (y <= 335) ? y : 315);
                         x += g.getFontMetrics().stringWidth(currentChar);
                     }
@@ -36,7 +36,7 @@ public class AnimatedText {
                         String currentChar = Character.toString(text.charAt(i));
                         int finalpos = (400 - g.getFontMetrics().stringWidth(text) / 2) + g.getFontMetrics().stringWidth(text.substring(0, i));
                         int initialpos = -g.getFontMetrics().stringWidth(text.substring(0, i));
-                        x = initialpos + time * 5;
+                        x = initialpos + time * 10;
                         g.drawString(currentChar, (x <= finalpos) ? x : finalpos, 315);
                     }
                     break;
@@ -45,7 +45,7 @@ public class AnimatedText {
                         String currentChar = Character.toString(text.charAt(i));
                         int finalpos = (400 - g.getFontMetrics().stringWidth(text) / 2) + g.getFontMetrics().stringWidth(text.substring(0, i));
                         int initialpos = 800 + g.getFontMetrics().stringWidth(text.substring(i, text.length()));
-                        x = initialpos - time * 5;
+                        x = initialpos - time * 10;
                         g.drawString(currentChar, (x >= finalpos) ? x : finalpos, 315);
                     }
                     break;
