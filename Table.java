@@ -189,8 +189,8 @@ public class Table extends JPanel implements ActionListener {
         int deckW = 138 + ((int) (deck.size() * 0.5));
         int deckH = ((int) (205 - (deck.size() * 0.1)));
 
-        int[] shadowX = {deckX, (int) (deckX - deckW * 0.3), deckX + deckW};
-        int[] shadowY = {deckY + deckH, deckY - (int) (deckH * 0.1), 20};
+        int[] shadowX = {deckX, (int) (deckX - deckW * 0.15), deckX + deckW};
+        int[] shadowY = {deckY + deckH, deckY - (int) (deckH * 0.05), 20};
 
         g.fillPolygon(shadowX, shadowY, 3);
 
