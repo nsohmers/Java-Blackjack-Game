@@ -10,5 +10,7 @@ public class Runner {
 		frame.add(table);
 		frame.pack();
 		frame.setVisible(true);
+
+        table.animate();
 	}
 }

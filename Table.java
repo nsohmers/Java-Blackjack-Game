@@ -27,7 +27,9 @@ public class Table extends JPanel implements ActionListener {
     private JLabel dealerScoreLabel;
     private JLabel dealerWinCounterLabel;
 
-	AudioPlayer audioPlayer;
+	private AudioPlayer audioPlayer;
+
+    private AnimatedText lostText, winText, tieText;
 
 	private int playerWins;
     private int dealerWins;
@@ -95,6 +97,10 @@ public class Table extends JPanel implements ActionListener {
 
         hitButton.setVisible(false);
 		standButton.setVisible(false);
+
+        lostText = new AnimatedText("You Lost!", Color.RED);
+        winText = new AnimatedText("You Won!", Color.YELLOW);
+        tieText = new AnimatedText("It's a Tie!", Color.GREEN);
 
 		deck = new ArrayList<Card>();
         playerCards = new ArrayList<Card>();
@@ -206,14 +212,23 @@ public class Table extends JPanel implements ActionListener {
             deck.get(i).draw((int) (40 - (i * 0.5)), (int) (20 - (i * 0.1)), g);
         }
 
-        }
+        lostText.draw(g);
+        winText.draw(g);
+        tieText.draw(g);
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if  (e.getSource() == newGameButton) {
             audioPlayer.playShuffleAudio();
+
             hitButton.setVisible(true);
 			standButton.setVisible(true);
+
+            lostText.hide();
+            winText.hide();
+            tieText.hide();
+
             this.resetDecks();
 
             this.moveCardDecktoPlayer();
@@ -231,6 +246,7 @@ public class Table extends JPanel implements ActionListener {
 
 			if (this.getPlayerCardValue() > 21) {
                 audioPlayer.playLoseAudio();
+                lostText.show();
 				hitButton.setVisible(false);
 				standButton.setVisible(false);
 				dealerWins++;
@@ -250,14 +266,19 @@ public class Table extends JPanel implements ActionListener {
 
             if (this.getDealerCardValue() > 21) {
                 audioPlayer.playWinAudio();
+                winText.show();
                 playerWins++;
             } else {
                 if (this.getPlayerCardValue() > this.getDealerCardValue()) {
                     audioPlayer.playWinAudio();
+                    winText.show();
                     playerWins++;
                 } else if (this.getDealerCardValue() > this.getPlayerCardValue()) {
                     audioPlayer.playLoseAudio();
+                    lostText.show();
                     dealerWins++;
+                } else {
+                    tieText.show();
                 }
             }
             
@@ -266,4 +287,21 @@ public class Table extends JPanel implements ActionListener {
 		this.updateTexts();
         repaint();
 	}
+
+    public void animate() {
+        while (true) {
+			try {
+				Thread.sleep(10);
+			}
+			catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
+
+            lostText.update();
+            winText.update();
+            tieText.update();
+
+            repaint();
+        }
+    }
 }
