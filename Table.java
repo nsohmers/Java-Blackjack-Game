@@ -13,7 +13,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
-public class Table extends JPanel implements ActionListener {
+
+import java.awt.event.MouseListener;
+import java.awt.event.MouseEvent;
+public class Table extends JPanel implements ActionListener, MouseListener  {
     private ArrayList<Card> deck;
     private ArrayList<Card> playerCards;
     private ArrayList<Card> dealerCards;
@@ -189,6 +192,48 @@ public class Table extends JPanel implements ActionListener {
         g.setColor(new Color(48, 95, 40)); // 47, 90, 40
         g.fillRect(0, 0, 800, 600);
 
+        g.setColor(new Color(37, 72, 30));// 22, 43, 18
+        g.fillOval(0, 525, 800, 150);
+
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 35));
+
+        int buttonSize =  g.getFontMetrics().stringWidth("iStandi");
+
+        int newGameButtonX = 600;
+        int newGameButtonY = 280;
+
+        int hitButtonX = newGameButtonX - (buttonSize / 2) - 5;
+        int hitButtonY = newGameButtonY - buttonSize - 5;
+
+        int standButtonX = newGameButtonX + (buttonSize / 2) + 5;
+        int standButtonY = newGameButtonY - buttonSize - 5;
+
+        g.setColor(new Color(22, 43, 18));
+        g.fillOval(hitButtonX, hitButtonY, buttonSize, buttonSize);
+
+        g.setColor(Color.WHITE);
+        g.drawOval(hitButtonX, hitButtonY, buttonSize, buttonSize);
+
+        g.drawString("Hit", (hitButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("Hit") / 2), ((hitButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - g.getFontMetrics().getHeight() / 4);
+
+        g.setColor(new Color(22, 43, 18));
+        g.fillOval(standButtonX, standButtonY, buttonSize, buttonSize);
+
+        g.setColor(Color.WHITE);
+        g.drawOval(standButtonX, standButtonY, buttonSize, buttonSize);
+
+        g.drawString("Stand", standButtonX + g.getFontMetrics().stringWidth("i"), ((standButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - g.getFontMetrics().getHeight() / 4);
+
+        g.setColor(new Color(22, 43, 18));
+        g.fillOval(newGameButtonX, newGameButtonY, buttonSize, buttonSize);
+
+        g.setColor(Color.WHITE);
+        g.drawOval(newGameButtonX, newGameButtonY, buttonSize, buttonSize);
+        g.drawString("New", (newGameButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("New") / 2), ((newGameButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - (g.getFontMetrics().getHeight() / 4) * 3);
+
+        g.drawString("Game", (newGameButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("Game") / 2), ((newGameButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) +  (g.getFontMetrics().getHeight() / 8));
+
+
         g.setColor(new Color(22, 43, 18));
         int deckX = ((int) (40 - (deck.size() * 0.5)));
         int deckY = ((int) (20 - ((deck.size() * 0.1)))) ;
@@ -304,4 +349,16 @@ public class Table extends JPanel implements ActionListener {
             repaint();
         }
     }
+
+    public void mousePressed(MouseEvent e){
+        /*
+        int x = e.getX();
+        int y = e.getY();
+        */
+    }
+
+    public void mouseReleased(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {}
+    public void mouseClicked(MouseEvent e) {}
 }
