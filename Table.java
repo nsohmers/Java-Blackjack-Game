@@ -6,24 +6,18 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Font;
 
-import javax.swing.JButton;
 import javax.swing.JLabel;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import java.util.ArrayList;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseEvent;
-public class Table extends JPanel implements ActionListener, MouseListener  {
+import java.awt.event.MouseMotionListener;
+
+public class Table extends JPanel implements MouseListener, MouseMotionListener  {
     private ArrayList<Card> deck;
     private ArrayList<Card> playerCards;
     private ArrayList<Card> dealerCards;
-    
-	private JButton newGameButton;
-    private JButton standButton;
-    private JButton hitButton;
 
     private JLabel playerScoreLabel;
     private JLabel playerWinCounterLabel;
@@ -37,37 +31,21 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
 	private int playerWins;
     private int dealerWins;
 
+    private int newGameButtonX = 635;
+    private int newGameButtonY = 468;
+
+    private Font buttonFont = new Font("Times New Roman", Font.PLAIN, 35);
+
+    private boolean showGameButtons, hitButtonHover, standButtonHover, newGameButtonHover;
+    private int buttonSize, hitButtonX, hitButtonY, standButtonX, standButtonY;
+
 	public Table(){
 		setLayout(null);
-
-        newGameButton = new JButton();
-        newGameButton.setFont(new Font("Arial", Font.BOLD, 20));
-        newGameButton.setHorizontalAlignment(SwingConstants.CENTER);
-        newGameButton.setBounds(560, 365, 200, 30);
-        newGameButton.setText("New Game");
-        this.add(newGameButton);
-        newGameButton.addActionListener(this);
-
-        standButton = new JButton();
-        standButton.setFont(new Font("Arial", Font.BOLD, 20));
-        standButton.setHorizontalAlignment(SwingConstants.CENTER);
-        standButton.setBounds(560, 305, 200, 30);
-        standButton.setText("Stand");
-        this.add(standButton);
-        standButton.addActionListener(this);
-
-        hitButton = new JButton();
-        hitButton.setFont(new Font("Arial", Font.BOLD, 20));
-        hitButton.setHorizontalAlignment(SwingConstants.CENTER);
-        hitButton.setBounds(560, 245, 200, 30);
-        hitButton.setText("Hit");
-        this.add(hitButton);
-        hitButton.addActionListener(this);
 
         playerScoreLabel = new JLabel();
         playerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         playerScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        playerScoreLabel.setBounds(460, 415, 300, 30);
+        playerScoreLabel.setBounds(460, 5, 300, 30);
         playerScoreLabel.setText("Current Player Score:");
         playerScoreLabel.setForeground(Color.WHITE);
         this.add(playerScoreLabel);
@@ -75,7 +53,7 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
         dealerScoreLabel = new JLabel();
         dealerScoreLabel.setFont(new Font("Arial", Font.BOLD, 20));
         dealerScoreLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        dealerScoreLabel.setBounds(460, 465, 300, 30);
+        dealerScoreLabel.setBounds(460, 55, 300, 30);
         dealerScoreLabel.setText("Current Dealer Score:");
         dealerScoreLabel.setForeground(Color.WHITE);
         this.add(dealerScoreLabel);
@@ -83,7 +61,7 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
         playerWinCounterLabel = new JLabel();
         playerWinCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
         playerWinCounterLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        playerWinCounterLabel.setBounds(460, 515, 300, 30);
+        playerWinCounterLabel.setBounds(460, 105, 300, 30);
         playerWinCounterLabel.setText("Player Win Counter:");
         playerWinCounterLabel.setForeground(Color.WHITE);
         this.add(playerWinCounterLabel);
@@ -91,15 +69,15 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
         dealerWinCounterLabel = new JLabel();
         dealerWinCounterLabel.setFont(new Font("Arial", Font.BOLD, 20));
         dealerWinCounterLabel.setHorizontalAlignment(SwingConstants.RIGHT);
-        dealerWinCounterLabel.setBounds(460, 565, 300, 30);
+        dealerWinCounterLabel.setBounds(460, 155, 300, 30);
         dealerWinCounterLabel.setText("Dealer Win Counter:");
         dealerWinCounterLabel.setForeground(Color.WHITE);
         this.add(dealerWinCounterLabel);
 
 		setFocusable(true);
 
-        hitButton.setVisible(false);
-		standButton.setVisible(false);
+        addMouseListener(this);
+        addMouseMotionListener(this);
 
         lostText = new AnimatedText("You Lost!", Color.RED);
         winText = new AnimatedText("You Won!", Color.YELLOW);
@@ -110,29 +88,39 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
         dealerCards = new ArrayList<Card>();
 
         resetDecks();
+        shuffleDeck();
 
 		audioPlayer = new AudioPlayer();
 		
 		playerWins = 0;
         dealerWins = 0;
+
+        showGameButtons = false;
+        hitButtonHover = false;
+        standButtonHover = false;
+        newGameButtonHover = false;
 	}
 
     private void moveCardDecktoPlayer() {
+        if (deck.size() == 0) {
+            shuffleDeck();
+        }
         playerCards.add(deck.get(0));
         playerCards.get(playerCards.size() - 1).show();
         deck.remove(0);
     }
 
     private void moveCardDecktoDealer() {
+        if (deck.size() == 0) {
+            shuffleDeck();
+        }
         dealerCards.add(deck.get(0));
         dealerCards.get(dealerCards.size() - 1).show();
         deck.remove(0);
     }
 
-	private void resetDecks() {
-        playerCards.clear();
-        dealerCards.clear();
-        deck.clear();
+    private void shuffleDeck() {
+        if (deck.size() != 0) return;
 
         for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 13; j++) {
@@ -146,6 +134,11 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
 			deck.set(i, deck.get(j));
             deck.set(j, temp);
 		}
+    }
+
+	private void resetDecks() {
+        playerCards.clear();
+        dealerCards.clear();
 	}
 
 	private int getPlayerCardValue() {
@@ -195,55 +188,19 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
         g.setColor(new Color(37, 72, 30));// 22, 43, 18
         g.fillOval(0, 525, 800, 150);
 
-        g.setFont(new Font("Times New Roman", Font.PLAIN, 35));
-
-        int buttonSize =  g.getFontMetrics().stringWidth("iStandi");
-
-        int newGameButtonX = 600;
-        int newGameButtonY = 280;
-
-        int hitButtonX = newGameButtonX - (buttonSize / 2) - 5;
-        int hitButtonY = newGameButtonY - buttonSize - 5;
-
-        int standButtonX = newGameButtonX + (buttonSize / 2) + 5;
-        int standButtonY = newGameButtonY - buttonSize - 5;
-
-        g.setColor(new Color(22, 43, 18));
-        g.fillOval(hitButtonX, hitButtonY, buttonSize, buttonSize);
-
-        g.setColor(Color.WHITE);
-        g.drawOval(hitButtonX, hitButtonY, buttonSize, buttonSize);
-
-        g.drawString("Hit", (hitButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("Hit") / 2), ((hitButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - g.getFontMetrics().getHeight() / 4);
-
-        g.setColor(new Color(22, 43, 18));
-        g.fillOval(standButtonX, standButtonY, buttonSize, buttonSize);
-
-        g.setColor(Color.WHITE);
-        g.drawOval(standButtonX, standButtonY, buttonSize, buttonSize);
-
-        g.drawString("Stand", standButtonX + g.getFontMetrics().stringWidth("i"), ((standButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - g.getFontMetrics().getHeight() / 4);
-
-        g.setColor(new Color(22, 43, 18));
-        g.fillOval(newGameButtonX, newGameButtonY, buttonSize, buttonSize);
-
-        g.setColor(Color.WHITE);
-        g.drawOval(newGameButtonX, newGameButtonY, buttonSize, buttonSize);
-        g.drawString("New", (newGameButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("New") / 2), ((newGameButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - (g.getFontMetrics().getHeight() / 4) * 3);
-
-        g.drawString("Game", (newGameButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("Game") / 2), ((newGameButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) +  (g.getFontMetrics().getHeight() / 8));
-
-
         g.setColor(new Color(22, 43, 18));
         int deckX = ((int) (40 - (deck.size() * 0.5)));
         int deckY = ((int) (20 - ((deck.size() * 0.1)))) ;
         int deckW = 138 + ((int) (deck.size() * 0.5));
         int deckH = ((int) (205 - (deck.size() * 0.1)));
 
-        int[] shadowX = {deckX, (int) (deckX - deckW * 0.15), deckX + deckW};
-        int[] shadowY = {deckY + deckH, deckY - (int) (deckH * 0.05), 20};
+        int[] shadowX = {deckX, (int) (deckX - deckW * 0.05), deckX + deckW};
+        int[] shadowY = {deckY + deckH, deckY - (int) (deckH * 0.01), 20};
 
-        g.fillPolygon(shadowX, shadowY, 3);
+        if (deck.size() != 0) {
+            g.fillPolygon(shadowX, shadowY, 3);
+        }
+        
 
         for (int i = 0; i < playerCards.size(); i++) {
             playerCards.get(i).draw(20 + i * 70, 325, g);
@@ -257,18 +214,74 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
             deck.get(i).draw((int) (40 - (i * 0.5)), (int) (20 - (i * 0.1)), g);
         }
 
+        g.setFont(buttonFont);
+
+        buttonSize = g.getFontMetrics().stringWidth("iStandi");
+
+        hitButtonX = newGameButtonX - (buttonSize / 2) - 5;
+        hitButtonY = newGameButtonY - buttonSize - 5;
+
+        standButtonX = newGameButtonX + (buttonSize / 2) + 5;
+        standButtonY = newGameButtonY - buttonSize - 5;
+
+        if (showGameButtons) {
+            g.setColor((hitButtonHover) ? Color.YELLOW : (new Color(22, 43, 18)));
+            g.fillOval(hitButtonX, hitButtonY, buttonSize, buttonSize);
+    
+            g.setColor(Color.WHITE);
+            g.drawOval(hitButtonX, hitButtonY, buttonSize, buttonSize);
+    
+            g.drawString("Hit", (hitButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("Hit") / 2), ((hitButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - g.getFontMetrics().getHeight() / 4);
+    
+            g.setColor((standButtonHover) ? Color.YELLOW : (new Color(22, 43, 18)));
+            g.fillOval(standButtonX, standButtonY, buttonSize, buttonSize);
+    
+            g.setColor(Color.WHITE);
+            g.drawOval(standButtonX, standButtonY, buttonSize, buttonSize);
+    
+            g.drawString("Stand", standButtonX + g.getFontMetrics().stringWidth("i"), ((standButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - g.getFontMetrics().getHeight() / 4);
+        }
+
+        g.setColor((newGameButtonHover) ? Color.YELLOW : (new Color(22, 43, 18)));
+        g.fillOval(newGameButtonX, newGameButtonY, buttonSize, buttonSize);
+
+        g.setColor(Color.WHITE);
+        g.drawOval(newGameButtonX, newGameButtonY, buttonSize, buttonSize);
+        g.drawString("New", (newGameButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("New") / 2), ((newGameButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) - (g.getFontMetrics().getHeight() / 4) * 3);
+
+        g.drawString("Game", (newGameButtonX  + (buttonSize / 2)) - (g.getFontMetrics().stringWidth("Game") / 2), ((newGameButtonY  + (buttonSize / 2)) + (g.getFontMetrics().getHeight() / 2)) +  (g.getFontMetrics().getHeight() / 8));
+
         lostText.draw(g);
         winText.draw(g);
         tieText.draw(g);
     }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if  (e.getSource() == newGameButton) {
-            audioPlayer.playShuffleAudio();
+    public void animate() {
+        while (true) {
+			try {
+				Thread.sleep(10);
+			}
+			catch(InterruptedException ex) {
+				Thread.currentThread().interrupt();
+			}
 
-            hitButton.setVisible(true);
-			standButton.setVisible(true);
+            lostText.update();
+            winText.update();
+            tieText.update();
+
+            repaint();
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e){
+        int x = e.getX();
+        int y = e.getY();
+
+        boolean updateScreen = false;
+
+        if (x >= newGameButtonX && x <= newGameButtonX + buttonSize && y >= newGameButtonY && y <= newGameButtonY + buttonSize) {
+            audioPlayer.playShuffleAudio();
 
             lostText.hide();
             winText.hide();
@@ -283,25 +296,27 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
             this.moveCardDecktoDealer();
 
             dealerCards.get(1).hide();
-		}
 
-        if (e.getSource() == hitButton) {
+            showGameButtons = true;
+            updateScreen = true;
+        } 
+
+        if ((x >= hitButtonX && x <= hitButtonX + buttonSize && y >= hitButtonY && y <= hitButtonY + buttonSize) && showGameButtons) {
             audioPlayer.playHitAudio();
             this.moveCardDecktoPlayer();
 
 			if (this.getPlayerCardValue() > 21) {
                 audioPlayer.playLoseAudio();
                 lostText.show();
-				hitButton.setVisible(false);
-				standButton.setVisible(false);
 				dealerWins++;
-			}
-        }
 
-        if (e.getSource() == standButton || this.getPlayerCardValue() == 21) {
+                showGameButtons = false;
+			}
+            updateScreen = true;
+        }
+        
+        if ((x >= standButtonX && x <= standButtonX + buttonSize && y >= standButtonY && y <= standButtonY + buttonSize) || this.getPlayerCardValue() == 21 && showGameButtons) {
             audioPlayer.playStandAudio();
-            hitButton.setVisible(false);
-			standButton.setVisible(false);
 
             dealerCards.get(1).show();
 	
@@ -326,39 +341,54 @@ public class Table extends JPanel implements ActionListener, MouseListener  {
                     tieText.show();
                 }
             }
-            
+
+            showGameButtons = false;
+            updateScreen = true;
         }
 
-		this.updateTexts();
-        repaint();
-	}
-
-    public void animate() {
-        while (true) {
-			try {
-				Thread.sleep(10);
-			}
-			catch(InterruptedException ex) {
-				Thread.currentThread().interrupt();
-			}
-
-            lostText.update();
-            winText.update();
-            tieText.update();
-
+        if (updateScreen) {
+            this.updateTexts();
             repaint();
         }
     }
 
-    public void mousePressed(MouseEvent e){
-        /*
+    @Override
+    public void mouseMoved(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
-        */
+
+        if (x >= newGameButtonX && x <= newGameButtonX + buttonSize && y >= newGameButtonY && y <= newGameButtonY + buttonSize) {
+            newGameButtonHover = true;
+        } else {
+            newGameButtonHover = false;
+        }
+
+        if ((x >= hitButtonX && x <= hitButtonX + buttonSize && y >= hitButtonY && y <= hitButtonY + buttonSize) && showGameButtons) {
+            hitButtonHover = true;
+        } else {
+            hitButtonHover = false;
+        }
+
+        if ((x >= standButtonX && x <= standButtonX + buttonSize && y >= standButtonY && y <= standButtonY + buttonSize) || this.getPlayerCardValue() == 21 && showGameButtons) {
+            standButtonHover = true;
+        } else {
+            standButtonHover = false;
+        }
+
     }
 
+    @Override
+    public void mouseDragged(MouseEvent e) {}
+
+    @Override
     public void mouseReleased(MouseEvent e) {}
+
+    @Override
     public void mouseEntered(MouseEvent e) {}
+
+    @Override
     public void mouseExited(MouseEvent e) {}
+
+    @Override
     public void mouseClicked(MouseEvent e) {}
 }
